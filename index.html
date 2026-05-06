@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>留言板 v2</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Microsoft YaHei', sans-serif; background: #f0f2f5; color: #333; }
+
+    header {
+      background: linear-gradient(135deg, #4a90d9, #357abd);
+      color: white; padding: 14px 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    header h1 { font-size: 1.2rem; }
+    .header-right { display: flex; align-items: center; gap: 10px; font-size: 0.88rem; }
+    .header-right span { opacity: 0.9; }
+
+    .btn { padding: 7px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: opacity 0.2s; }
+    .btn:hover { opacity: 0.85; }
+    .btn-white { background: white; color: #4a90d9; }
+    .btn-outline { background: transparent; color: white; border: 1px solid rgba(255,255,255,0.7); }
+    .btn-primary { background: #4a90d9; color: white; }
+    .btn-danger { background: #e05c5c; color: white; }
+    .btn-sm { padding: 4px 10px; font-size: 0.78rem; }
+    .btn-reply { background: #6ab187; color: white; }
+
+    .container { max-width: 760px; margin: 28px auto; padding: 0 16px; }
+    .card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+    .card-title { font-size: 0.95rem; font-weight: bold; color: #4a90d9; margin-bottom: 14px; }
+
+    /* 模态框 */
+    .modal-mask { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; justify-content: center; align-items: center; }
+    .modal-mask.show { display: flex; }
+    .modal { background: white; border-radius: 12px; padding: 28px; width: 360px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
+    .modal h2 { font-size: 1.1rem; margin-bottom: 18px; color: #333; }
+    .modal input { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; margin-bottom: 12px; outline: none; }
+    .modal input:focus { border-color: #4a90d9; }
+    .modal-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 4px; }
+    .modal-err { color: #e05c5c; font-size: 0.82rem; margin-bottom: 8px; min-height: 18px; }
+    .modal-switch { font-size: 0.82rem; color: #888; margin-top: 12px; text-align: center; }
+    .modal-switch a { color: #4a90d9; cursor: pointer; }
+
+    textarea { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; resize: vertical; min-height: 80px; outline: none; margin-bottom: 10px; }
+    textarea:focus { border-color: #4a90d9; }
+
+    .message-item { border-left: 4px solid #4a90d9; padding: 14px 16px; margin-bottom: 16px; background: #f8faff; border-radius: 0 8px 8px 0; }
+    .message-meta { font-size: 0.82rem; color: #888; margin-bottom: 6px; }
+    .message-author { font-weight: bold; color: #4a90d9; margin-right: 8px; }
+    .message-content { font-size: 0.95rem; margin-bottom: 10px; line-height: 1.6; }
+    .message-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .replies { margin-top: 10px; padding-left: 16px; border-left: 2px solid #d0e4f7; }
+    .reply-item { background: #eef5ff; border-radius: 6px; padding: 8px 12px; margin-bottom: 6px; font-size: 0.88rem; display: flex; justify-content: space-between; align-items: flex-start; }
+    .reply-content { flex: 1; }
+    .reply-author { font-weight: bold; color: #357abd; margin-right: 6px; }
+    .reply-time { color: #aaa; font-size: 0.76rem; }
+
+    .reply-form { display: none; margin-top: 10px; }
+    .reply-form.open { display: block; }
+
+    .admin-badge { background: #e05c5c; color: white; font-size: 0.7rem; padding: 1px 6px; border-radius: 4px; margin-left: 4px; vertical-align: middle; }
+
+    #no-messages { text-align: center; color: #aaa; padding: 30px 0; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>📋 留言板</h1>
+  <div class="header-right" id="header-user">
+    <button class="btn btn-outline" onclick="showModal('login')">登录</button>
+    <button class="btn btn-white" onclick="showModal('register')">注册</button>
+  </div>
+</header>
+
+<!-- 登录模态框 -->
+<div class="modal-mask" id="modal-login">
+  <div class="modal">
+    <h2>登录</h2>
+    <input id="login-username" type="text" placeholder="用户名">
+    <input id="login-password" type="password" placeholder="密码">
+    <div class="modal-err" id="login-err"></div>
+    <div class="modal-btns">
+      <button class="btn" onclick="closeModal('login')">取消</button>
+      <button class="btn btn-primary" onclick="doLogin()">登录</button>
+    </div>
+    <div class="modal-switch">没有账号？<a onclick="switchModal('login','register')">立即注册</a></div>
+  </div>
+</div>
+
+<!-- 注册模态框 -->
+<div class="modal-mask" id="modal-register">
+  <div class="modal">
+    <h2>注册</h2>
+    <input id="reg-username" type="text" placeholder="用户名">
+    <input id="reg-password" type="password" placeholder="密码">
+    <div class="modal-err" id="reg-err"></div>
+    <div class="modal-btns">
+      <button class="btn" onclick="closeModal('register')">取消</button>
+      <button class="btn btn-primary" onclick="doRegister()">注册</button>
+    </div>
+    <div class="modal-switch">已有账号？<a onclick="switchModal('register','login')">去登录</a></div>
+  </div>
+</div>
+
+<div class="container">
+  <!-- 发布留言 -->
+  <div class="card" id="post-card">
+    <div class="card-title">✏️ 发表留言</div>
+    <div id="post-tip" style="color:#aaa;font-size:0.88rem;padding:10px 0">请先登录后发表留言</div>
+    <div id="post-form" style="display:none">
+      <textarea id="content" placeholder="请输入留言内容..."></textarea>
+      <button class="btn btn-primary" onclick="submitMessage()">发布留言</button>
+    </div>
+  </div>
+
+  <!-- 留言列表 -->
+  <div class="card">
+    <div class="card-title">💬 留言列表</div>
+    <div id="messages-list"><p id="no-messages">暂无留言</p></div>
+  </div>
+</div>
+
+<script>
+  let currentUser = null;
+
+  // 初始化：检查登录状态
+  async function init() {
+    const res = await fetch('/api/me', { credentials: 'include' });
+    currentUser = await res.json();
+    updateHeader();
+    loadMessages();
+  }
+
+  function updateHeader() {
+    const el = document.getElementById('header-user');
+    if (currentUser) {
+      const badge = currentUser.isAdmin ? '<span class="admin-badge">管理员</span>' : '';
+      el.innerHTML = `<span>${currentUser.username}${badge}</span><button class="btn btn-outline" onclick="doLogout()">退出</button>`;
+      document.getElementById('post-tip').style.display = 'none';
+      document.getElementById('post-form').style.display = 'block';
+    } else {
+      el.innerHTML = `<button class="btn btn-outline" onclick="showModal('login')">登录</button><button class="btn btn-white" onclick="showModal('register')">注册</button>`;
+      document.getElementById('post-tip').style.display = 'block';
+      document.getElementById('post-form').style.display = 'none';
+    }
+  }
+
+  // 模态框
+  function showModal(type) { document.getElementById('modal-' + type).classList.add('show'); }
+  function closeModal(type) { document.getElementById('modal-' + type).classList.remove('show'); }
+  function switchModal(from, to) { closeModal(from); showModal(to); }
+
+  async function doLogin() {
+    const username = document.getElementById('login-username').value.trim();
+    const password = document.getElementById('login-password').value;
+    const err = document.getElementById('login-err');
+    const res = await fetch('/api/login', {
+      method: 'POST', credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (!res.ok) { err.textContent = data.error; return; }
+    currentUser = data;
+    closeModal('login');
+    updateHeader();
+    loadMessages();
+  }
+
+  async function doRegister() {
+    const username = document.getElementById('reg-username').value.trim();
+    const password = document.getElementById('reg-password').value;
+    const err = document.getElementById('reg-err');
+    const res = await fetch('/api/register', {
+      method: 'POST', credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (!res.ok) { err.textContent = data.error; return; }
+    currentUser = data;
+    closeModal('register');
+    updateHeader();
+    loadMessages();
+  }
+
+  async function doLogout() {
+    await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+    currentUser = null;
+    updateHeader();
+    loadMessages();
+  }
+
+  // 留言
+  async function loadMessages() {
+    const res = await fetch('/api/messages', { credentials: 'include' });
+    const messages = await res.json();
+    const list = document.getElementById('messages-list');
+    if (!messages.length) { list.innerHTML = '<p id="no-messages">暂无留言，快来发表第一条吧~</p>'; return; }
+
+    list.innerHTML = messages.map(msg => `
+      <div class="message-item" id="msg-${msg.id}">
+        <div class="message-meta">
+          <span class="message-author">${esc(msg.author)}</span>
+          <span>${new Date(msg.created_at).toLocaleString('zh-CN')}</span>
+        </div>
+        <div class="message-content">${esc(msg.content)}</div>
+        <div class="message-actions">
+          ${currentUser ? `<button class="btn btn-sm btn-reply" onclick="toggleReply(${msg.id})">💬 回复</button>` : ''}
+          ${currentUser?.isAdmin ? `<button class="btn btn-sm btn-danger" onclick="deleteMessage(${msg.id})">🗑 删除留言</button>` : ''}
+        </div>
+        <div class="reply-form" id="reply-form-${msg.id}">
+          <textarea id="reply-content-${msg.id}" placeholder="输入回复内容..." style="min-height:55px;margin-top:10px"></textarea>
+          <button class="btn btn-primary btn-sm" onclick="submitReply(${msg.id})">提交回复</button>
+        </div>
+        ${msg.replies.length ? `
+          <div class="replies">
+            ${msg.replies.map(r => `
+              <div class="reply-item">
+                <div class="reply-content">
+                  <span class="reply-author">${esc(r.author)}</span>
+                  <span class="reply-time">${new Date(r.created_at).toLocaleString('zh-CN')}</span>
+                  <div style="margin-top:3px">${esc(r.content)}</div>
+                </div>
+                ${currentUser?.isAdmin ? `<button class="btn btn-sm btn-danger" style="margin-left:8px;flex-shrink:0" onclick="deleteReply(${r.id})">删除</button>` : ''}
+              </div>
+            `).join('')}
+          </div>` : ''}
+      </div>
+    `).join('');
+  }
+
+  function esc(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function toggleReply(id) {
+    document.getElementById(`reply-form-${id}`).classList.toggle('open');
+  }
+
+  async function submitMessage() {
+    const content = document.getElementById('content').value.trim();
+    if (!content) return alert('内容不能为空');
+    await fetch('/api/messages', {
+      method: 'POST', credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content })
+    });
+    document.getElementById('content').value = '';
+    loadMessages();
+  }
+
+  async function submitReply(msgId) {
+    const content = document.getElementById(`reply-content-${msgId}`).value.trim();
+    if (!content) return alert('内容不能为空');
+    await fetch(`/api/messages/${msgId}/replies`, {
+      method: 'POST', credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content })
+    });
+    loadMessages();
+  }
+
+  async function deleteMessage(id) {
+    if (!confirm('确定删除该留言及所有回复？')) return;
+    await fetch(`/api/messages/${id}`, { method: 'DELETE', credentials: 'include' });
+    loadMessages();
+  }
+
+  async function deleteReply(id) {
+    if (!confirm('确定删除该回复？')) return;
+    await fetch(`/api/replies/${id}`, { method: 'DELETE', credentials: 'include' });
+    loadMessages();
+  }
+
+  init();
+</script>
+</body>
+</html>
