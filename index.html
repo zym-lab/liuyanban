@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexus 留言板 - 高效沟通平台</title>
+  <title>Nexus - 高端留言板</title>
   <style>
     * {
       margin: 0;
@@ -12,17 +12,22 @@
     }
 
     :root {
-      --primary: #2563eb;
-      --primary-dark: #1e40af;
-      --primary-light: #3b82f6;
+      --primary: #1f2937;
+      --primary-light: #374151;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
       --success: #10b981;
       --danger: #ef4444;
-      --warning: #f59e0b;
-      --secondary: #6b7280;
       --border: #e5e7eb;
-      --bg-light: #f9fafb;
-      --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --bg-primary: #ffffff;
+      --bg-secondary: #f9fafb;
+      --bg-tertiary: #f3f4f6;
+      --text-primary: #111827;
+      --text-secondary: #6b7280;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
       --radius: 12px;
     }
 
@@ -32,76 +37,150 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Helvetica Neue', sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      color: #1f2937;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
       line-height: 1.6;
       min-height: 100vh;
     }
 
-    /* ===== Header ===== */
-    header {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-      color: white;
-      padding: 20px 0;
-      box-shadow: var(--shadow);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+    /* ===== Layout ===== */
+    .app-wrapper {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
     }
 
-    .header-container {
-      max-width: 1200px;
+    /* ===== Header / Navigation ===== */
+    header {
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .header-inner {
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 0 20px;
+      padding: 16px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 32px;
     }
 
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .logo {
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: -1px;
-      background: linear-gradient(135deg, #fff 0%, #e0e7ff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .tagline {
-      font-size: 12px;
-      opacity: 0.85;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-top: 3px;
-    }
-
-    .header-right {
+    .logo-section {
       display: flex;
       align-items: center;
       gap: 12px;
+      flex-shrink: 0;
     }
 
-    .user-info {
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent) 0%, #2563eb 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.5px;
+    }
+
+    .logo-subtitle {
+      font-size: 11px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .header-nav {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+    }
+
+    .nav-item {
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      cursor: pointer;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-item:hover {
+      color: var(--accent);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    .user-card {
       display: flex;
       align-items: center;
       gap: 10px;
       padding: 8px 16px;
-      background: rgba(255, 255, 255, 0.15);
+      background: var(--bg-tertiary);
       border-radius: 8px;
-      backdrop-filter: blur(10px);
+      font-size: 13px;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
       font-size: 14px;
+      font-weight: 700;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .user-name {
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 13px;
+    }
+
+    .user-status {
+      font-size: 11px;
+      color: var(--text-secondary);
     }
 
     .admin-badge {
-      background: var(--danger);
+      display: inline-block;
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
       color: white;
       font-size: 10px;
       font-weight: 700;
@@ -111,42 +190,44 @@
       letter-spacing: 0.5px;
     }
 
-    /* ===== Button ===== */
+    /* ===== Button System ===== */
     .btn {
       padding: 10px 20px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      white-space: nowrap;
     }
 
     .btn:hover {
-      transform: translateY(-2px);
+      transform: translateY(-1px);
     }
 
     .btn-primary {
-      background: var(--primary);
+      background: var(--accent);
       color: white;
     }
 
     .btn-primary:hover {
-      background: var(--primary-dark);
-      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+      background: var(--accent-hover);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
     }
 
-    .btn-outline {
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-      border: 1px solid rgba(255, 255, 255, 0.3);
+    .btn-secondary {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
     }
 
-    .btn-outline:hover {
-      background: rgba(255, 255, 255, 0.3);
+    .btn-secondary:hover {
+      background: var(--border);
+      border-color: var(--text-secondary);
     }
 
     .btn-success {
@@ -156,6 +237,7 @@
 
     .btn-success:hover {
       background: #059669;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
     }
 
     .btn-danger {
@@ -165,7 +247,7 @@
 
     .btn-danger:hover {
       background: #dc2626;
-      box-shadow: 0 8px 16px rgba(239, 68, 68, 0.2);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
     }
 
     .btn-sm {
@@ -173,8 +255,22 @@
       font-size: 12px;
     }
 
+    .btn-icon {
+      padding: 8px 12px;
+      gap: 4px;
+    }
+
+    /* ===== Main Content ===== */
+    .main-content {
+      flex: 1;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      width: 100%;
+    }
+
     /* ===== Modal ===== */
-    .modal-mask {
+    .modal-overlay {
       display: none;
       position: fixed;
       inset: 0;
@@ -185,9 +281,9 @@
       align-items: center;
     }
 
-    .modal-mask.show {
+    .modal-overlay.show {
       display: flex;
-      animation: fadeIn 0.3s ease;
+      animation: fadeIn 0.2s ease;
     }
 
     @keyframes fadeIn {
@@ -196,12 +292,12 @@
     }
 
     .modal {
-      background: white;
+      background: var(--bg-primary);
       border-radius: var(--radius);
-      padding: 40px;
+      padding: 32px;
       width: 100%;
-      max-width: 420px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      max-width: 440px;
+      box-shadow: var(--shadow-xl);
       animation: slideUp 0.3s ease;
     }
 
@@ -216,272 +312,354 @@
       }
     }
 
-    .modal h2 {
+    .modal-header {
+      margin-bottom: 24px;
+    }
+
+    .modal-title {
       font-size: 24px;
-      margin-bottom: 8px;
-      color: #111827;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
     }
 
     .modal-subtitle {
-      color: var(--secondary);
       font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .modal-body {
       margin-bottom: 24px;
     }
 
-    .modal-group {
+    .form-group {
       margin-bottom: 16px;
     }
 
-    .modal-group label {
+    .form-label {
       display: block;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
-      color: #374151;
+      color: var(--text-primary);
       margin-bottom: 6px;
     }
 
-    .modal input {
+    .form-input {
       width: 100%;
-      padding: 12px 14px;
-      border: 2px solid var(--border);
+      padding: 10px 12px;
+      border: 1px solid var(--border);
       border-radius: 8px;
-      font-size: 14px;
-      transition: all 0.3s ease;
-      font-family: inherit;
-    }
-
-    .modal input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-    }
-
-    .modal-err {
-      color: var(--danger);
       font-size: 13px;
-      margin-bottom: 12px;
-      min-height: 20px;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .form-error {
+      color: var(--danger);
+      font-size: 12px;
+      margin-top: 4px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
+      min-height: 18px;
     }
 
-    .modal-btns {
+    .modal-footer {
       display: flex;
       gap: 10px;
       justify-content: flex-end;
-      margin-top: 28px;
+      margin-bottom: 16px;
     }
 
-    .modal-switch {
+    .modal-divider {
       text-align: center;
-      margin-top: 16px;
-      font-size: 13px;
-      color: var(--secondary);
+      font-size: 12px;
+      color: var(--text-secondary);
     }
 
-    .modal-switch a {
-      color: var(--primary);
+    .modal-divider a {
+      color: var(--accent);
       cursor: pointer;
-      font-weight: 600;
       text-decoration: none;
+      font-weight: 600;
     }
 
-    .modal-switch a:hover {
+    .modal-divider a:hover {
       text-decoration: underline;
     }
 
-    /* ===== Container ===== */
-    .container {
-      max-width: 1000px;
-      margin: 40px auto;
-      padding: 0 20px;
+    /* ===== Cards ===== */
+    .section {
+      margin-bottom: 24px;
     }
 
-    /* ===== Card ===== */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .section-icon {
+      font-size: 18px;
+    }
+
     .card {
-      background: white;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 32px;
-      margin-bottom: 24px;
-      box-shadow: var(--shadow);
+      padding: 24px;
       transition: all 0.3s ease;
     }
 
     .card:hover {
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+      border-color: var(--accent);
+      box-shadow: var(--shadow-md);
     }
 
-    .card-title {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .card-title-icon {
-      font-size: 24px;
-    }
-
-    .post-tip {
-      color: var(--secondary);
-      font-size: 14px;
-      padding: 16px;
-      background: var(--bg-light);
-      border-radius: 8px;
-      border-left: 4px solid var(--primary);
-    }
-
-    .post-form {
+    /* ===== Compose Area ===== */
+    .compose-area {
       display: none;
     }
 
-    .post-form.show {
+    .compose-area.show {
       display: block;
     }
 
-    textarea {
+    .compose-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .compose-avatar {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent) 0%, #2563eb 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .compose-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .compose-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .compose-hint {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .compose-input {
       width: 100%;
-      padding: 14px 16px;
-      border: 2px solid var(--border);
+      padding: 12px 14px;
+      border: 1px solid var(--border);
       border-radius: 8px;
       font-size: 14px;
       font-family: inherit;
       resize: vertical;
       min-height: 100px;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
       margin-bottom: 12px;
     }
 
-    textarea:focus {
+    .compose-input:focus {
       outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
 
-    .post-actions {
+    .compose-actions {
       display: flex;
       gap: 8px;
       justify-content: flex-end;
     }
 
-    /* ===== Messages ===== */
-    #no-messages {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--secondary);
-      font-size: 16px;
+    .compose-hint-area {
+      padding: 16px;
+      background: var(--bg-tertiary);
+      border-radius: 8px;
+      border-left: 3px solid var(--accent);
+      font-size: 13px;
+      color: var(--text-secondary);
     }
 
-    .message-item {
-      background: linear-gradient(135deg, #f8faff 0%, #eef5ff 100%);
-      border-left: 4px solid var(--primary);
-      border-radius: 0 8px 8px 0;
-      padding: 24px;
-      margin-bottom: 20px;
+    /* ===== Messages List ===== */
+    .messages-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .message {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
       transition: all 0.3s ease;
     }
 
-    .message-item:hover {
-      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.15);
-      transform: translateX(4px);
+    .message:hover {
+      border-color: var(--accent);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
     }
 
-    .message-meta {
+    .message-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .message-author-info {
       display: flex;
       align-items: center;
-      gap: 12px;
-      font-size: 13px;
-      color: var(--secondary);
-      margin-bottom: 10px;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .message-avatar {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent) 0%, #2563eb 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .message-author-details {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
 
     .message-author {
-      font-weight: 700;
-      color: var(--primary);
-      font-size: 14px;
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--text-primary);
     }
 
     .message-time {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .message-content {
-      font-size: 15px;
-      line-height: 1.8;
-      color: #1f2937;
-      margin-bottom: 16px;
-      word-break: break-word;
+      font-size: 12px;
+      color: var(--text-secondary);
     }
 
     .message-actions {
       display: flex;
       gap: 8px;
-      flex-wrap: wrap;
       align-items: center;
+      flex-shrink: 0;
+    }
+
+    .message-content {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      word-break: break-word;
+    }
+
+    .message-footer {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
     }
 
     /* ===== Replies ===== */
-    .replies {
+    .replies-section {
       margin-top: 16px;
       padding-left: 16px;
-      border-left: 2px solid #d0e4f7;
+      border-left: 2px solid var(--accent);
     }
 
-    .reply-item {
-      background: #f3f4f6;
+    .replies-header {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .reply {
+      background: var(--bg-tertiary);
       border-radius: 8px;
-      padding: 12px 14px;
+      padding: 12px;
       margin-bottom: 8px;
       font-size: 13px;
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
       gap: 10px;
-      transition: all 0.2s ease;
-    }
-
-    .reply-item:hover {
-      background: #e5e7eb;
-    }
-
-    .reply-content {
-      flex: 1;
     }
 
     .reply-author {
-      font-weight: 700;
-      color: var(--primary);
-      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      font-size: 12px;
     }
 
     .reply-text {
       margin-top: 4px;
-      color: #374151;
+      color: var(--text-primary);
       line-height: 1.6;
       word-break: break-word;
     }
 
     .reply-time {
-      color: #9ca3af;
       font-size: 11px;
+      color: var(--text-secondary);
       margin-top: 4px;
     }
 
-    .reply-delete {
+    .reply-actions {
+      display: flex;
+      gap: 4px;
       flex-shrink: 0;
+      align-items: flex-start;
     }
 
     .reply-form {
       display: none;
       margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid #e5e7eb;
+      padding: 12px;
+      background: var(--bg-secondary);
+      border-radius: 8px;
     }
 
     .reply-form.open {
@@ -501,173 +679,244 @@
     }
 
     .reply-form textarea {
-      min-height: 70px;
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: inherit;
+      resize: none;
+      min-height: 60px;
       margin-bottom: 8px;
+    }
+
+    .reply-form textarea:focus {
+      outline: none;
+      border-color: var(--accent);
     }
 
     .reply-form-actions {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       justify-content: flex-end;
     }
 
     /* ===== Empty State ===== */
     .empty-state {
       text-align: center;
-      padding: 80px 20px;
+      padding: 60px 20px;
     }
 
-    .empty-state-icon {
+    .empty-icon {
       font-size: 64px;
       margin-bottom: 16px;
       opacity: 0.5;
     }
 
-    .empty-state-text {
-      color: var(--secondary);
+    .empty-title {
       font-size: 16px;
-      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
     }
 
-    .empty-state-hint {
-      color: #9ca3af;
+    .empty-text {
       font-size: 14px;
+      color: var(--text-secondary);
     }
 
     /* ===== Responsive ===== */
     @media (max-width: 768px) {
-      .header-container {
-        flex-direction: column;
+      .header-inner {
+        padding: 12px 16px;
         gap: 16px;
-        text-align: center;
+        flex-wrap: wrap;
+      }
+
+      .header-nav {
+        display: none;
+      }
+
+      .logo-text {
+        display: none;
       }
 
       .modal {
-        margin: 20px;
+        margin: 16px;
         max-width: none;
       }
 
-      .card {
-        padding: 20px;
-      }
-
-      .message-item {
+      .main-content {
         padding: 16px;
       }
 
-      .user-info {
-        font-size: 12px;
-        padding: 6px 12px;
+      .card {
+        padding: 16px;
       }
 
-      .logo {
-        font-size: 22px;
+      .message {
+        padding: 16px;
+      }
+
+      .message-header {
+        flex-direction: column;
+      }
+
+      .message-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .compose-actions {
+        flex-direction: column-reverse;
+      }
+
+      .compose-actions .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .user-card {
+        display: none;
       }
     }
 
-    /* ===== Animations ===== */
-    @keyframes shimmer {
-      0% { background-position: -1000px 0; }
-      100% { background-position: 1000px 0; }
-    }
+    @media (max-width: 480px) {
+      .logo-title {
+        font-size: 16px;
+      }
 
-    .loading {
-      animation: shimmer 2s infinite;
-      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-      background-size: 1000px 100%;
+      .logo-subtitle {
+        font-size: 10px;
+      }
+
+      .modal-title {
+        font-size: 20px;
+      }
+
+      .section-title {
+        font-size: 14px;
+      }
+
+      .message-content {
+        font-size: 13px;
+      }
     }
   </style>
 </head>
 <body>
 
-<header>
-  <div class="header-container">
-    <div class="header-left">
-      <div>
-        <div class="logo">✨ Nexus</div>
-        <div class="tagline">Message Board</div>
+<div class="app-wrapper">
+  <!-- Header -->
+  <header>
+    <div class="header-inner">
+      <div class="logo-section">
+        <div class="logo-icon">✨</div>
+        <div class="logo-text">
+          <div class="logo-title">Nexus</div>
+          <div class="logo-subtitle">Message Board</div>
+        </div>
+      </div>
+      <div class="header-nav" id="header-nav" style="display: none;">
+        <a class="nav-item">首页</a>
+        <a class="nav-item">热门</a>
+        <a class="nav-item">关于</a>
+      </div>
+      <div class="header-actions" id="header-actions">
+        <button class="btn btn-secondary btn-icon" onclick="showModal('login')">登录</button>
+        <button class="btn btn-primary btn-icon" onclick="showModal('register')">注册</button>
       </div>
     </div>
-    <div class="header-right" id="header-user">
-      <button class="btn btn-outline" onclick="showModal('login')">登录</button>
-      <button class="btn btn-outline" onclick="showModal('register')">注册</button>
+  </header>
+
+  <!-- Login Modal -->
+  <div class="modal-overlay" id="modal-login">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">欢迎回来</div>
+        <div class="modal-subtitle">登录你的账户以继续</div>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">用户名</label>
+          <input id="login-username" class="form-input" type="text" placeholder="输入你的用户名">
+        </div>
+        <div class="form-group">
+          <label class="form-label">密码</label>
+          <input id="login-password" class="form-input" type="password" placeholder="输入你的密码">
+        </div>
+        <div class="form-error" id="login-err"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('login')">取消</button>
+        <button class="btn btn-primary" onclick="doLogin()">登录</button>
+      </div>
+      <div class="modal-divider">没有账号？<a onclick="switchModal('login','register')">立即注册</a></div>
     </div>
   </div>
-</header>
 
-<!-- 登录模态框 -->
-<div class="modal-mask" id="modal-login">
-  <div class="modal">
-    <h2>欢迎回来</h2>
-    <div class="modal-subtitle">登录你的账户</div>
-    <div class="modal-group">
-      <label>用户名</label>
-      <input id="login-username" type="text" placeholder="输入你的用户名">
+  <!-- Register Modal -->
+  <div class="modal-overlay" id="modal-register">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">加入我们</div>
+        <div class="modal-subtitle">创建一个新账户加入社区</div>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">用户名</label>
+          <input id="reg-username" class="form-input" type="text" placeholder="选择一个用户名">
+        </div>
+        <div class="form-group">
+          <label class="form-label">密码</label>
+          <input id="reg-password" class="form-input" type="password" placeholder="设置一个密码">
+        </div>
+        <div class="form-error" id="reg-err"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('register')">取消</button>
+        <button class="btn btn-primary" onclick="doRegister()">注册</button>
+      </div>
+      <div class="modal-divider">已有账号？<a onclick="switchModal('register','login')">去登录</a></div>
     </div>
-    <div class="modal-group">
-      <label>密码</label>
-      <input id="login-password" type="password" placeholder="输入你的密码">
-    </div>
-    <div class="modal-err" id="login-err"></div>
-    <div class="modal-btns">
-      <button class="btn btn-outline" onclick="closeModal('login')">取消</button>
-      <button class="btn btn-primary" onclick="doLogin()">登录</button>
-    </div>
-    <div class="modal-switch">没有账号？<a onclick="switchModal('login','register')">立即注册</a></div>
   </div>
-</div>
 
-<!-- 注册模态框 -->
-<div class="modal-mask" id="modal-register">
-  <div class="modal">
-    <h2>加入我们</h2>
-    <div class="modal-subtitle">创建一个新账户</div>
-    <div class="modal-group">
-      <label>用户名</label>
-      <input id="reg-username" type="text" placeholder="选择一个用户名">
-    </div>
-    <div class="modal-group">
-      <label>密码</label>
-      <input id="reg-password" type="password" placeholder="设置一个强密码">
-    </div>
-    <div class="modal-err" id="reg-err"></div>
-    <div class="modal-btns">
-      <button class="btn btn-outline" onclick="closeModal('register')">取消</button>
-      <button class="btn btn-primary" onclick="doRegister()">注册</button>
-    </div>
-    <div class="modal-switch">已有账号？<a onclick="switchModal('register','login')">去登录</a></div>
-  </div>
-</div>
-
-<div class="container">
-  <!-- 发布留言 -->
-  <div class="card">
-    <div class="card-title">
-      <span class="card-title-icon">✍️</span>
-      发表留言
-    </div>
-    <div id="post-tip" class="post-tip">🔐 请先登录后发表留言</div>
-    <div id="post-form" class="post-form show">
-      <textarea id="content" placeholder="分享你的想法，让我们一起交流..."></textarea>
-      <div class="post-actions">
-        <button class="btn btn-primary" onclick="submitMessage()">
-          <span>📤</span> 发布留言
-        </button>
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Compose Section -->
+    <div class="section">
+      <div class="card">
+        <div id="compose-login-hint" class="compose-hint-area">
+          🔐 请先 <a onclick="showModal('login')" style="color: var(--accent); cursor: pointer; font-weight: 600;">登录</a> 或 <a onclick="showModal('register')" style="color: var(--accent); cursor: pointer; font-weight: 600;">注册</a> 后发表留言
+        </div>
+        <div id="compose-form" class="compose-area">
+          <div class="compose-header">
+            <div class="compose-avatar" id="compose-avatar">U</div>
+            <div class="compose-info">
+              <div class="compose-name" id="compose-name">User</div>
+              <div class="compose-hint">现在分享你的想法</div>
+            </div>
+          </div>
+          <textarea id="content" class="compose-input" placeholder="说些什么吧...（按 Ctrl+Enter 快速发布）"></textarea>
+          <div class="compose-actions">
+            <button class="btn btn-primary" onclick="submitMessage()">发布留言</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- 留言列表 -->
-  <div class="card">
-    <div class="card-title">
-      <span class="card-title-icon">💬</span>
-      留言列表
-    </div>
-    <div id="messages-list">
-      <div class="empty-state">
-        <div class="empty-state-icon">📭</div>
-        <div class="empty-state-text">暂无留言</div>
-        <div class="empty-state-hint">快来发表第一条留言吧</div>
+    <!-- Messages Section -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-icon">💬</span>
+        <span class="section-title">所有留言</span>
+      </div>
+      <div id="messages-list" class="messages-list">
+        <div class="empty-state">
+          <div class="empty-icon">📭</div>
+          <div class="empty-title">暂无留言</div>
+          <div class="empty-text">快来发表第一条留言吧</div>
+        </div>
       </div>
     </div>
   </div>
@@ -685,25 +934,32 @@
   }
 
   function updateHeader() {
-    const el = document.getElementById('header-user');
+    const el = document.getElementById('header-actions');
     if (currentUser) {
+      const avatar = currentUser.username.charAt(0).toUpperCase();
       const badge = currentUser.isAdmin ? '<span class="admin-badge">👑 管理员</span>' : '';
       el.innerHTML = `
-        <div class="user-info">
-          <span>👤 ${esc(currentUser.username)}</span>
+        <div class="user-card">
+          <div class="user-avatar">${avatar}</div>
+          <div class="user-info">
+            <div class="user-name">${esc(currentUser.username)}</div>
+            <div class="user-status">已登录</div>
+          </div>
           ${badge}
         </div>
-        <button class="btn btn-outline" onclick="doLogout()">退出</button>
+        <button class="btn btn-secondary btn-icon" onclick="doLogout()">退出</button>
       `;
-      document.getElementById('post-tip').style.display = 'none';
-      document.getElementById('post-form').classList.add('show');
+      document.getElementById('compose-login-hint').style.display = 'none';
+      document.getElementById('compose-form').classList.add('show');
+      document.getElementById('compose-avatar').textContent = avatar;
+      document.getElementById('compose-name').textContent = currentUser.username;
     } else {
       el.innerHTML = `
-        <button class="btn btn-outline" onclick="showModal('login')">登录</button>
-        <button class="btn btn-outline" onclick="showModal('register')">注册</button>
+        <button class="btn btn-secondary btn-icon" onclick="showModal('login')">登录</button>
+        <button class="btn btn-primary btn-icon" onclick="showModal('register')">注册</button>
       `;
-      document.getElementById('post-tip').style.display = 'block';
-      document.getElementById('post-form').classList.remove('show');
+      document.getElementById('compose-login-hint').style.display = 'block';
+      document.getElementById('compose-form').classList.remove('show');
     }
   }
 
@@ -787,11 +1043,12 @@
   async function doLogout() {
     await fetch('/api/logout', { method: 'POST', credentials: 'include' });
     currentUser = null;
+    document.getElementById('content').value = '';
     updateHeader();
     loadMessages();
   }
 
-  // 留言管理
+  // Messages Management
   async function loadMessages() {
     const res = await fetch('/api/messages', { credentials: 'include' });
     const messages = await res.json();
@@ -800,49 +1057,56 @@
     if (!messages.length) {
       list.innerHTML = `
         <div class="empty-state">
-          <div class="empty-state-icon">📭</div>
-          <div class="empty-state-text">暂无留言</div>
-          <div class="empty-state-hint">快来发表第一条留言吧</div>
+          <div class="empty-icon">📭</div>
+          <div class="empty-title">暂无留言</div>
+          <div class="empty-text">快来发表第一条留言吧</div>
         </div>
       `;
       return;
     }
 
-    list.innerHTML = messages.map(msg => `
-      <div class="message-item" id="msg-${msg.id}">
-        <div class="message-meta">
-          <span class="message-author">👤 ${esc(msg.author)}</span>
-          <span class="message-time">
-            🕐 ${new Date(msg.created_at).toLocaleString('zh-CN')}
-          </span>
-        </div>
-        <div class="message-content">${esc(msg.content)}</div>
-        <div class="message-actions">
-          ${currentUser ? `<button class="btn btn-sm btn-primary" onclick="toggleReply(${msg.id})">💬 回复</button>` : ''}
-          ${currentUser?.isAdmin ? `<button class="btn btn-sm btn-danger" onclick="deleteMessage(${msg.id})">🗑️ 删除</button>` : ''}
-        </div>
-        <div class="reply-form" id="reply-form-${msg.id}">
-          <textarea id="reply-content-${msg.id}" placeholder="输入你的回复..."></textarea>
-          <div class="reply-form-actions">
-            <button class="btn btn-sm btn-outline" onclick="toggleReply(${msg.id})">取消</button>
-            <button class="btn btn-sm btn-success" onclick="submitReply(${msg.id})">提交回复</button>
+    list.innerHTML = messages.map(msg => {
+      const avatar = msg.author.charAt(0).toUpperCase();
+      return `
+        <div class="message" id="msg-${msg.id}">
+          <div class="message-header">
+            <div class="message-author-info">
+              <div class="message-avatar">${avatar}</div>
+              <div class="message-author-details">
+                <div class="message-author">${esc(msg.author)}</div>
+                <div class="message-time">${new Date(msg.created_at).toLocaleString('zh-CN')}</div>
+              </div>
+            </div>
+            <div class="message-actions">
+              ${currentUser ? `<button class="btn btn-sm btn-primary" onclick="toggleReply(${msg.id})">回复</button>` : ''}
+              ${currentUser?.isAdmin ? `<button class="btn btn-sm btn-danger" onclick="deleteMessage(${msg.id})">删除</button>` : ''}
+            </div>
+          </div>
+          <div class="message-content">${esc(msg.content)}</div>
+          ${msg.replies.length ? `
+            <div class="replies-section">
+              <div class="replies-header">💬 ${msg.replies.length} 条回复</div>
+              ${msg.replies.map(r => `
+                <div class="reply">
+                  <div style="flex: 1;">
+                    <div class="reply-author">${esc(r.author)}</div>
+                    <div class="reply-text">${esc(r.content)}</div>
+                    <div class="reply-time">${new Date(r.created_at).toLocaleString('zh-CN')}</div>
+                  </div>
+                  ${currentUser?.isAdmin ? `<div class="reply-actions"><button class="btn btn-sm btn-danger" onclick="deleteReply(${r.id})">删除</button></div>` : ''}
+                </div>
+              `).join('')}
+            </div>` : ''}
+          <div class="reply-form" id="reply-form-${msg.id}">
+            <textarea id="reply-content-${msg.id}" placeholder="输入你的回复..."></textarea>
+            <div class="reply-form-actions">
+              <button class="btn btn-sm btn-secondary" onclick="toggleReply(${msg.id})">取消</button>
+              <button class="btn btn-sm btn-primary" onclick="submitReply(${msg.id})">提交</button>
+            </div>
           </div>
         </div>
-        ${msg.replies.length ? `
-          <div class="replies">
-            ${msg.replies.map(r => `
-              <div class="reply-item">
-                <div class="reply-content">
-                  <div class="reply-author">👤 ${esc(r.author)}</div>
-                  <div class="reply-text">${esc(r.content)}</div>
-                  <div class="reply-time">🕐 ${new Date(r.created_at).toLocaleString('zh-CN')}</div>
-                </div>
-                ${currentUser?.isAdmin ? `<div class="reply-delete"><button class="btn btn-sm btn-danger" onclick="deleteReply(${r.id})">删除</button></div>` : ''}
-              </div>
-            `).join('')}
-          </div>` : ''}
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
   function esc(str) {
@@ -903,6 +1167,16 @@
     await fetch(`/api/replies/${id}`, { method: 'DELETE', credentials: 'include' });
     loadMessages();
   }
+
+  // Keyboard shortcut
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && currentUser) {
+      const content = document.getElementById('content');
+      if (document.activeElement === content && content.value.trim()) {
+        submitMessage();
+      }
+    }
+  });
 
   init();
 </script>
